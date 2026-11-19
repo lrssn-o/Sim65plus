@@ -59,7 +59,7 @@
 <body>
 
 
-    <h1>Hur ska jag simträna idag?</h1>
+    <h1>Vad ska jag göra på simträningen idag?</h1>
     <button id="pickButton">Visa ett pass</button>
 	<button id="printButton" style="display:none;">Skriv ut nedanstående pass</button>
 
@@ -68,6 +68,7 @@
  
     <script>
         let phrases = [];
+
 
         async function loadPhrases() {
             const files = [
@@ -93,8 +94,10 @@
                 );
 
                 phrases = contents.map(text => text.trim());
-              document.getElementById("phrase").textContent =
-                   "                " + String.fromCodePoint(127946) ; 
+				const phrase = document.getElementById("phrase");
+                phrase.style.textAlign = "center";
+                phrase.textContent = String.fromCodePoint(127946);
+           
             } catch (error) {
                 document.getElementById("phrase").textContent =
                     "Error loading phrase files.";
@@ -111,8 +114,8 @@ function showRandomPhrase() {
 
     const randomIndex =
         Math.floor(Math.random() * phrases.length);
-
-    document.getElementById("phrase").textContent =
+     document.getElementById("phrase").style.textAlign = "left";
+     document.getElementById("phrase").textContent =
         phrases[randomIndex];
 
     if (firstClick) {
