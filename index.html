@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vad ska jag på simträningen idag?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #phrase {
+            margin: 30px auto;
+            max-width: 800px;
+            text-align: left;
+            font-size: 20px;
+            color: #333;
+            white-space: pre-wrap;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        /* Print only the phrase area */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #phrase,
+            #phrase * {
+                visibility: visible;
+            }
+
+            #phrase {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: none;
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <h1>Hur ska jag simträna idag?</h1>
+    <button id="pickButton">Visa ett pass</button>
+	<button id="printButton" style="display:none;">Skriv ut nedanstående pass</button>
+
+
+    <div id="phrase">Loading phrases...</div>
+ 
+    <script>
+        let phrases = [];
+
+        async function loadPhrases() {
+            const files = [
+                "p01.txt",
+                "p02.txt",
+                "p03.txt",
+                "p04.txt",
+                "p05.txt",
+				"p06.txt",
+				"p07.txt"
+            ];
+
+            try {
+                const contents = await Promise.all(
+                    files.map(file =>
+                        fetch(file).then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Cannot load ${file}`);
+                            }
+                            return response.text();
+                        })
+                    )
+                );
+
+                phrases = contents.map(text => text.trim());
+              document.getElementById("phrase").textContent =
+                   "  ?" + String.fromCodePoint(127946) + "?                    ?" + String.fromCodePoint(127946) + "?                    ?" + String.fromCodePoint(127946)+ "?                    ?" + String.fromCodePoint(127946)+ "?                    ?" + String.fromCodePoint(127946) + "?"; 
+            } catch (error) {
+                document.getElementById("phrase").textContent =
+                    "Error loading phrase files.";
+                console.error(error);
+            }
+        }
+
+let firstClick = true;
+
+function showRandomPhrase() {
+    if (phrases.length === 0) {
+        return;
+    }
+
+    const randomIndex =
+        Math.floor(Math.random() * phrases.length);
+
+    document.getElementById("phrase").textContent =
+        phrases[randomIndex];
+
+    if (firstClick) {
+        document.getElementById("pickButton").textContent =
+            "Nej tack, visa ett annat pass";
+        firstClick = false;
+			document.getElementById("printButton").style.display = "inline-block";
+    }
+}
+		  function printPhrase() {
+            window.print();
+        }
+ 
+
+        document.getElementById("pickButton")
+            .addEventListener("click", showRandomPhrase);
+		document.getElementById("printButton")
+            .addEventListener("click", printPhrase);
+
+        loadPhrases();
+		 
+    </script>
+	
+	<a href="https://svensksimidrott.se/utbildning/mallar--verktyg/for-ledare-tranare/">Mer träningsinfo, både land och vatten</a>
+	<BR><BR>
+	<a href="https://simdomare.se/wp-content/uploads/lathund_simdomare_se.pdf">För den som inte vill bli diskad &#128516</a>
+</body>
+</html>
